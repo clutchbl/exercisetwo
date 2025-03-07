@@ -1,0 +1,39 @@
+Section 1 - Linking Cush
+
+    1.  
+        Change #1: Adding a global definition of shell_pgrp in termstate_management.h
+                int shell_pgrp 
+        Change #2: Changed the static declaration in termstate_management.c to global
+                int shell_pgrp
+        Git Diff: [saarthak@spruce src]$ git diff
+                    diff --git a/src/termstate_management.c b/src/termstate_management.c
+                    index c875e48..0cec78a 100644
+                    --- a/src/termstate_management.c
+                    +++ b/src/termstate_management.c
+                    @@ -20,7 +20,7 @@
+                    static int terminal_fd = -1;           /* The controlling terminal */
+                    static struct termios saved_tty_state; /* The state of the terminal when shell
+                                            was started. */
+                    -static int shell_pgrp;          /* The pgrp of the shell when it started */
+                    +int shell_pgrp;          /* The pgrp of the shell when it started */
+ 
+                    /* Initialize tty support. */
+                    void
+                    diff --git a/src/termstate_management.h b/src/termstate_management.h
+
+    2. 
+        Removed static modifier from job list variable
+        diff --git a/src/cush.c b/src/cush.c
+        index 3cd4392..7a732ab 100644
+        --- a/src/cush.c
+        +++ b/src/cush.c
+        @@ -68,7 +68,7 @@ struct job {
+        * (b) a linked list to support iteration
+        */
+        #define MAXJOBS (1<<16)
+        -static struct list job_list;
+        +struct list job_list;
+ 
+        static struct job * jid2job[MAXJOBS];
+
+        3. 
